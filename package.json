@@ -2,6 +2,7 @@
   "name": "plant-disease-finder",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://soumit70.github.io/plant-disease-finder/",
   "type": "module",
   "scripts": {
     "dev": "vite",

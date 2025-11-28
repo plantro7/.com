@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { AlertTriangle } from 'lucide-react';
 import Navbar from './components/Navbar';
 import ImageUploader from './components/ImageUploader';
