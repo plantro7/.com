@@ -24,7 +24,7 @@ async function fileToBase64(file) {
  */
 export const analyzeImageWithOpenRouter = async (imageFile) => {
     if (!API_KEY) {
-        throw new Error("Missing OpenRouter API Key. Please add VITE_OPENROUTER_API_KEY to your .env file.");
+        throw new Error("MISSING_API_KEY: OpenRouter API Key is missing. Please add VITE_OPENROUTER_API_KEY to your .env file (local) or GitHub Secrets (production).");
     }
 
     try {

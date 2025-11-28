@@ -114,9 +114,26 @@ function Home() {
             )}
 
             {error && (
-              <div className="mb-8 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-2">
-                <AlertTriangle className="w-5 h-5" />
-                {error}
+              <div className="mb-8 p-6 bg-red-50 text-red-700 rounded-xl border border-red-100 animate-in fade-in slide-in-from-top-2">
+                <div className="flex items-center gap-3 mb-3">
+                  <AlertTriangle className="w-6 h-6 text-red-600" />
+                  <span className="font-bold text-lg">Analysis Failed</span>
+                </div>
+                <p className="mb-4">{error.replace("MISSING_API_KEY: ", "")}</p>
+
+                {error.includes("MISSING_API_KEY") && (
+                  <div className="bg-white p-4 rounded-lg border border-red-200 text-sm text-slate-600">
+                    <p className="font-semibold mb-2">How to fix this on GitHub Pages:</p>
+                    <ol className="list-decimal list-inside space-y-1 ml-1">
+                      <li>Go to your GitHub Repository Settings.</li>
+                      <li>Navigate to <strong>Secrets and variables</strong> &gt; <strong>Actions</strong>.</li>
+                      <li>Click <strong>New repository secret</strong>.</li>
+                      <li>Name: <code className="bg-slate-100 px-1 py-0.5 rounded text-red-600">VITE_OPENROUTER_API_KEY</code></li>
+                      <li>Value: Your API Key (starts with sk-or-v1...)</li>
+                      <li>Redeploy your app (or push a new commit).</li>
+                    </ol>
+                  </div>
+                )}
               </div>
             )}
 
