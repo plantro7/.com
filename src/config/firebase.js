@@ -17,14 +17,21 @@ let googleProvider = null;
 
 const isConfigValid = firebaseConfig.apiKey &&
     firebaseConfig.apiKey !== 'VITE_FIREBASE_API_KEY' &&
-    !firebaseConfig.apiKey.includes('your_api_key');
+    !firebaseConfig.apiKey.includes('your_api_key') &&
+    firebaseConfig.authDomain &&
+    firebaseConfig.projectId;
 
 if (isConfigValid) {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    googleProvider = new GoogleAuthProvider();
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        googleProvider = new GoogleAuthProvider();
+    } catch (error) {
+        console.error("Firebase initialization failed:", error);
+        console.warn("Auth will be disabled due to initialization error.");
+    }
 } else {
-    console.warn("Firebase config missing. Auth will be disabled.");
+    console.warn("Firebase config missing or invalid. Auth will be disabled.");
 }
 
 export { auth, googleProvider };
