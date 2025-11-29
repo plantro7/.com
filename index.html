@@ -17,7 +17,7 @@
     window.onerror = function (msg, url, lineNo, columnNo, error) {
       var errorDisplay = document.getElementById('error-display');
       errorDisplay.style.display = 'block';
-      errorDisplay.innerHTML += '<h3>Error: ' + msg + '</h3><p>URL: ' + url + '</p><p>Line: ' + lineNo + '</p><p>Stack: ' + (error ? error.stack : 'N/A') + '</p>';
+      errorDisplay.innerHTML += '<h3>Runtime Error: ' + msg + '</h3><p>URL: ' + url + '</p><p>Line: ' + lineNo + '</p><p>Stack: ' + (error ? error.stack : 'N/A') + '</p>';
       return false;
     };
     window.onunhandledrejection = function (event) {
@@ -25,6 +25,13 @@
       errorDisplay.style.display = 'block';
       errorDisplay.innerHTML += '<h3>Unhandled Rejection: ' + event.reason + '</h3>';
     };
+    window.addEventListener('error', function (event) {
+      if (event.target && (event.target.tagName === 'SCRIPT' || event.target.tagName === 'LINK' || event.target.tagName === 'IMG')) {
+        var errorDisplay = document.getElementById('error-display');
+        errorDisplay.style.display = 'block';
+        errorDisplay.innerHTML += '<h3>Resource Error (404): Failed to load ' + event.target.tagName + '</h3><p>Source: ' + (event.target.src || event.target.href) + '</p>';
+      }
+    }, true);
   </script>
   <script type="module" src="/src/main.jsx"></script>
 </body>
