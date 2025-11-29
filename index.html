@@ -10,6 +10,22 @@
 
 <body>
   <div id="root"></div>
+  <div id="error-display"
+    style="position: fixed; top: 0; left: 0; width: 100%; background: rgba(255,0,0,0.9); color: white; padding: 20px; z-index: 9999; display: none;">
+  </div>
+  <script>
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      var errorDisplay = document.getElementById('error-display');
+      errorDisplay.style.display = 'block';
+      errorDisplay.innerHTML += '<h3>Error: ' + msg + '</h3><p>URL: ' + url + '</p><p>Line: ' + lineNo + '</p><p>Stack: ' + (error ? error.stack : 'N/A') + '</p>';
+      return false;
+    };
+    window.onunhandledrejection = function (event) {
+      var errorDisplay = document.getElementById('error-display');
+      errorDisplay.style.display = 'block';
+      errorDisplay.innerHTML += '<h3>Unhandled Rejection: ' + event.reason + '</h3>';
+    };
+  </script>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
