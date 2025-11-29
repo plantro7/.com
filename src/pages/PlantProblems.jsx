@@ -6,6 +6,8 @@ import { analyzeImageWithGroq, searchPlantProblemWithGroq } from '../utils/groq'
 import { analyzeImage as analyzeImageOffline } from '../utils/tfModel';
 
 // Mock data for solutions
+const BASE_URL = import.meta.env.BASE_URL;
+
 const MOCK_SOLUTIONS = {
     "Leaf Spot": {
         plantName: "Monstera Deliciosa",
@@ -22,7 +24,7 @@ const MOCK_SOLUTIONS = {
         supplements: [
             {
                 name: "Copper Fungicide",
-                image: "/image_upload/fungicide.png",
+                image: `${BASE_URL}image_upload/fungicide.png`,
                 price: 450,
                 link: "https://www.flipkart.com/search?q=copper+fungicide+for+plants"
             }
@@ -43,7 +45,7 @@ const MOCK_SOLUTIONS = {
         supplements: [
             {
                 name: "Perlite & Potting Mix",
-                image: "/image_upload/Gemini_Generated_Image_l2lvz0l2lvz0l2lv.png",
+                image: `${BASE_URL}image_upload/Gemini_Generated_Image_l2lvz0l2lvz0l2lv.png`,
                 price: 299,
                 link: "https://www.flipkart.com/search?q=perlite+potting+mix"
             }
@@ -92,7 +94,7 @@ const PlantProblems = () => {
                     ? result.supplements
                     : [{
                         name: "General Plant Food",
-                        image: "/image_upload/fertilizer.png",
+                        image: `${BASE_URL}image_upload/fertilizer.png`,
                         price: "299",
                         link: "https://www.flipkart.com/search?q=plant+fertilizer"
                     }]

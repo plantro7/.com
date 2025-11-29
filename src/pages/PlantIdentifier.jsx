@@ -1,13 +1,15 @@
 import React from 'react';
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 const plants = [
     {
         category: "Common Houseplants",
         items: [
             { name: "Monstera Deliciosa", image: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&q=80&w=400", description: "Known for its large, perforated leaves." },
-            { name: "Snake Plant", image: "image_upload/Gemini_Generated_Image_hsua2shsua2shsua.png", description: "Hardy and low-light tolerant." },
-            { name: "Fiddle Leaf Fig", image: "image_upload/fiddle_leaf_fig.png", description: "Popular for its large, violin-shaped leaves." },
-            { name: "Pothos", image: "image_upload/pothos.png", description: "Fast-growing trailing vine." }
+            { name: "Snake Plant", image: `${BASE_URL}image_upload/Gemini_Generated_Image_hsua2shsua2shsua.png`, description: "Hardy and low-light tolerant." },
+            { name: "Fiddle Leaf Fig", image: `${BASE_URL}image_upload/fiddle_leaf_fig.png`, description: "Popular for its large, violin-shaped leaves." },
+            { name: "Pothos", image: `${BASE_URL}image_upload/pothos.png`, description: "Fast-growing trailing vine." }
         ]
     },
     {
@@ -22,8 +24,8 @@ const plants = [
     {
         category: "Common Diseases",
         items: [
-            { name: "Leaf Spot", image: "image_upload/shot_hole_disease.png", description: "Brown or black spots on foliage." },
-            { name: "Powdery Mildew", image: "image_upload/powdery_mildew.png", description: "White fungal growth on leaves." },
+            { name: "Leaf Spot", image: `${BASE_URL}image_upload/shot_hole_disease.png`, description: "Brown or black spots on foliage." },
+            { name: "Powdery Mildew", image: `${BASE_URL}image_upload/powdery_mildew.png`, description: "White fungal growth on leaves." },
             { name: "Root Rot", image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=400", description: "Decay of roots due to overwatering." },
             { name: "Aphids", image: "https://images.unsplash.com/photo-1543257580-7269da773bf5?auto=format&fit=crop&q=80&w=400", description: "Small sap-sucking insects." }
         ]

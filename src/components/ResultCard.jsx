@@ -23,13 +23,14 @@ const ResultCard = ({ result, onReset }) => {
     const [submitted, setSubmitted] = React.useState(false);
 
     const getSupplementImage = (name) => {
+        const BASE_URL = import.meta.env.BASE_URL;
         const normalizedName = name.toLowerCase();
-        if (normalizedName.includes('neem')) return '/image_upload/neem_oil.png';
-        if (normalizedName.includes('fungicide')) return '/image_upload/fungicide.png';
-        if (normalizedName.includes('potassium bicarbonate')) return '/image_upload/potassium_bicarbonate.png';
-        if (normalizedName.includes('calcium nitrate')) return '/image_upload/calcium_nitrate.png';
-        if (normalizedName.includes('fertilizer')) return '/image_upload/fertilizer.png';
-        return '/image_upload/fertilizer.png'; // Default fallback
+        if (normalizedName.includes('neem')) return `${BASE_URL}image_upload/neem_oil.png`;
+        if (normalizedName.includes('fungicide')) return `${BASE_URL}image_upload/fungicide.png`;
+        if (normalizedName.includes('potassium bicarbonate')) return `${BASE_URL}image_upload/potassium_bicarbonate.png`;
+        if (normalizedName.includes('calcium nitrate')) return `${BASE_URL}image_upload/calcium_nitrate.png`;
+        if (normalizedName.includes('fertilizer')) return `${BASE_URL}image_upload/fertilizer.png`;
+        return `${BASE_URL}image_upload/fertilizer.png`; // Default fallback
     };
 
     const handleFeedbackSubmit = (e) => {
