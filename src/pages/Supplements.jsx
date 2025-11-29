@@ -6,7 +6,7 @@ const supplements = [
     {
         id: 1,
         name: "Organic Neem Oil",
-        image: "/plant-disease-finder/image_upload/Gemini_Generated_Image_tlm6zttlm6zttlm6.png",
+        image: "/.com/image_upload/Gemini_Generated_Image_tlm6zttlm6zttlm6.png",
         description: "Natural pesticide for all types of plants. Controls aphids, whiteflies, and spider mites.",
         recoveryTime: "3-5 Days",
         price: 299,
@@ -15,7 +15,7 @@ const supplements = [
     {
         id: 2,
         name: "Seaweed Liquid Fertilizer",
-        image: "/plant-disease-finder/image_upload/fertilizer.png",
+        image: "/.com/image_upload/fertilizer.png",
         description: "Boosts growth and stress resistance. Rich in micronutrients and hormones.",
         recoveryTime: "7-10 Days",
         price: 450,
@@ -33,7 +33,7 @@ const supplements = [
     {
         id: 4,
         name: "Vermicompost",
-        image: "/plant-disease-finder/image_upload/Gemini_Generated_Image_n1rb5vn1rb5vn1rb.png",
+        image: "/.com/image_upload/Gemini_Generated_Image_n1rb5vn1rb5vn1rb.png",
         description: "Organic manure rich in nutrients. Improves soil structure and water retention.",
         recoveryTime: "10-14 Days",
         price: 399,
@@ -42,7 +42,7 @@ const supplements = [
     {
         id: 5,
         name: "Bone Meal Powder",
-        image: "/plant-disease-finder/image_upload/Gemini_Generated_Image_2ravsq2ravsq2rav.png",
+        image: "/.com/image_upload/Gemini_Generated_Image_2ravsq2ravsq2rav.png",
         description: "Slow-release phosphorus source. Promotes strong root development and flowering.",
         recoveryTime: "15-20 Days",
         price: 350,
@@ -60,7 +60,7 @@ const supplements = [
     {
         id: 7,
         name: "Mustard Cake Powder",
-        image: "/plant-disease-finder/image_upload/Gemini_Generated_Image_7jr4t97jr4t97jr4.png",
+        image: "/.com/image_upload/Gemini_Generated_Image_7jr4t97jr4t97jr4.png",
         description: "Traditional organic fertilizer. High in nitrogen and prevents soil-borne diseases.",
         recoveryTime: "10-15 Days",
         price: 199,
@@ -69,7 +69,7 @@ const supplements = [
     {
         id: 8,
         name: "Perlite",
-        image: "/plant-disease-finder/image_upload/Gemini_Generated_Image_l2lvz0l2lvz0l2lv.png",
+        image: "/.com/image_upload/Gemini_Generated_Image_l2lvz0l2lvz0l2lv.png",
         description: "Improves drainage and aeration in potting mix. Prevents root rot.",
         recoveryTime: "Immediate",
         price: 299,
@@ -78,7 +78,7 @@ const supplements = [
     {
         id: 9,
         name: "Cocopeat Block",
-        image: "/plant-disease-finder/image_upload/Gemini_Generated_Image_kectjkectjkectjk.png",
+        image: "/.com/image_upload/Gemini_Generated_Image_kectjkectjkectjk.png",
         description: "Excellent medium for seed germination. Retains moisture and improves soil texture.",
         recoveryTime: "Immediate",
         price: 199,
@@ -87,7 +87,7 @@ const supplements = [
     {
         id: 10,
         name: "Fungicide Powder",
-        image: "/plant-disease-finder/image_upload/fungicide.png",
+        image: "/.com/image_upload/fungicide.png",
         description: "Treats root rot, leaf spot, and mildew. Systemic action for long-lasting protection.",
         recoveryTime: "3-7 Days",
         price: 180,
@@ -96,7 +96,7 @@ const supplements = [
     {
         id: 11,
         name: "Rooting Hormone",
-        image: "/plant-disease-finder/image_upload/Gemini_Generated_Image_p94ki2p94ki2p94k.png",
+        image: "/.com/image_upload/Gemini_Generated_Image_p94ki2p94ki2p94k.png",
         description: "Stimulates root growth in cuttings. Increases propagation success rate.",
         recoveryTime: "10-14 Days",
         price: 220,

@@ -95,7 +95,7 @@ export const analyzeImageWithOpenRouter = async (imageFile) => {
                     "price": "Estimated Price in INR (just the number, e.g. 450)", 
                     "store": "Flipkart", 
                     "link": "https://www.flipkart.com/search?q=PRODUCT_NAME",
-                    "image": "/plant-disease-finder/image_upload/fertilizer.png",
+                    "image": "/.com/image_upload/fertilizer.png",
                     "why_this_product": "Brief explanation of why this specific product helps this specific disease."
                 }
             ]
@@ -199,7 +199,7 @@ export const searchPlantProblemWithOpenRouter = async (query) => {
                     "name": "Recommended Product Name",
                     "price": "Estimated Price in INR (just the number, e.g. 450)",
                     "link": "https://www.flipkart.com/search?q=PRODUCT_NAME_HERE",
-                    "image": "/plant-disease-finder/image_upload/fertilizer.png",
+                    "image": "/.com/image_upload/fertilizer.png",
                     "why_this_product": "Brief explanation of why this specific product helps this specific disease."
                 }
             ]
