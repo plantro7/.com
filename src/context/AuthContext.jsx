@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, googleProvider } from '../config/firebase';
-import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
+import { signInWithPopup, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const AuthContext = createContext();
 
@@ -13,17 +13,47 @@ export const AuthProvider = ({ children }) => {
     const login = async () => {
         if (!auth) {
             console.log("Firebase config missing. Using Mock Login.");
-            alert("Simulating Google Login... (Demo Mode)");
+            // alert("Simulating Google Login... (Demo Mode)"); // Removed alert to prevent double alerts with modal
             const mockUser = {
-                uid: "mock-user-123",
-                email: "demo@example.com",
-                displayName: "Demo User",
+                uid: "mock-google-user-123",
+                email: "demo.google@example.com",
+                displayName: "Demo Google User",
                 photoURL: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
             };
             setCurrentUser(mockUser);
-            return;
+            return mockUser;
         }
         return signInWithPopup(auth, googleProvider);
+    };
+
+    const loginWithEmail = async (email, password) => {
+        if (!auth) {
+            console.log("Firebase config missing. Using Mock Email Login.");
+            const mockUser = {
+                uid: "mock-email-user-456",
+                email: email,
+                displayName: email.split('@')[0],
+                photoURL: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
+            };
+            setCurrentUser(mockUser);
+            return mockUser;
+        }
+        return signInWithEmailAndPassword(auth, email, password);
+    };
+
+    const signupWithEmail = async (email, password) => {
+        if (!auth) {
+            console.log("Firebase config missing. Using Mock Signup.");
+            const mockUser = {
+                uid: "mock-new-user-789",
+                email: email,
+                displayName: email.split('@')[0],
+                photoURL: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
+            };
+            setCurrentUser(mockUser);
+            return mockUser;
+        }
+        return createUserWithEmailAndPassword(auth, email, password);
     };
 
     const logout = async () => {
@@ -55,7 +85,10 @@ export const AuthProvider = ({ children }) => {
 
     const value = {
         currentUser,
+        currentUser,
         login,
+        loginWithEmail,
+        signupWithEmail,
         logout
     };
 

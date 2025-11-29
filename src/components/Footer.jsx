@@ -23,7 +23,7 @@ const Footer = () => {
                     <div className="space-y-6">
                         <div className="flex items-center gap-2 text-white font-bold text-2xl">
                             <div className="bg-brand-primary p-1 rounded-lg">
-                                <img src="/logo.jpg" alt="Plantro Logo" className="w-8 h-8 object-cover rounded-md" />
+                                <img src="logo.jpg" alt="Plantro Logo" className="w-8 h-8 object-cover rounded-md" />
                             </div>
                             <span>Plantro</span>
                         </div>

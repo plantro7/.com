@@ -3,6 +3,7 @@ import { Search, Camera, Upload, ArrowRight, ShoppingCart, Clock, AlertCircle, C
 import Button from '../components/Button';
 import ImageUploader from '../components/ImageUploader';
 import { analyzeImageWithOpenRouter, searchPlantProblemWithOpenRouter } from '../utils/openrouter';
+import { analyzeImage as analyzeImageOffline } from '../utils/tfModel';
 
 // Mock data for solutions
 const MOCK_SOLUTIONS = {
@@ -56,6 +57,7 @@ const PlantProblems = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [solution, setSolution] = useState(null);
+    const [isOfflineMode, setIsOfflineMode] = useState(false);
 
     const handleImageSelect = async (file, previewUrl) => {
         setSelectedImage(file);
@@ -63,7 +65,12 @@ const PlantProblems = () => {
         setSolution(null);
 
         try {
-            const result = await analyzeImageWithOpenRouter(file);
+            let result;
+            if (isOfflineMode) {
+                result = await analyzeImageOffline(file);
+            } else {
+                result = await analyzeImageWithOpenRouter(file);
+            }
 
             if (result.isUnknown) {
                 alert("Could not identify a plant in this image. Please try again.");
@@ -158,6 +165,25 @@ const PlantProblems = () => {
                             </div>
                         </button>
                     </div>
+                </div>
+
+                {/* Offline Mode Toggle */}
+                <div className="flex justify-center mb-8">
+                    <label className="flex items-center cursor-pointer gap-3 bg-white px-6 py-3 rounded-full shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                        <div className="relative">
+                            <input
+                                type="checkbox"
+                                className="sr-only"
+                                checked={isOfflineMode}
+                                onChange={() => setIsOfflineMode(!isOfflineMode)}
+                            />
+                            <div className={`block w-14 h-8 rounded-full transition-colors ${isOfflineMode ? 'bg-brand-primary' : 'bg-slate-300'}`}></div>
+                            <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform ${isOfflineMode ? 'transform translate-x-6' : ''}`}></div>
+                        </div>
+                        <span className={`font-bold ${isOfflineMode ? 'text-brand-primary' : 'text-slate-500'}`}>
+                            {isOfflineMode ? 'Offline Mode Enabled' : 'Enable Offline Mode'}
+                        </span>
+                    </label>
                 </div>
 
                 {/* Main Content Area */}

@@ -5,17 +5,19 @@ import Button from './Button';
 
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import LoginModal from './LoginModal';
 
 const Navbar = () => {
   const { language, setLanguage, t } = useLanguage();
   const { currentUser, login, logout } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleAuth = async () => {
     try {
       if (currentUser) {
         await logout();
       } else {
-        await login();
+        setIsLoginModalOpen(true);
       }
     } catch (error) {
       console.error("Auth error:", error);
@@ -82,6 +84,10 @@ const Navbar = () => {
       </nav>
 
 
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
     </>
   );
 };
