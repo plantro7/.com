@@ -1,18 +1,12 @@
-import { OpenRouter } from "@openrouter/sdk";
 
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+const API_KEY = import.meta.env.VITE_GROQ_API_KEY || import.meta.env.VITE_OPENROUTER_API_KEY;
 
 // Debug: Check if API Key is loaded (masked)
 if (API_KEY) {
-    console.log("OpenRouter API Key loaded:", API_KEY.substring(0, 8) + "...");
+    console.log("API Key loaded:", API_KEY.substring(0, 8) + "...");
 } else {
-    console.error("OpenRouter API Key is MISSING!");
+    console.error("API Key is MISSING! Please add VITE_GROQ_API_KEY to your .env file.");
 }
-
-const openrouter = new OpenRouter({
-    apiKey: API_KEY,
-    dangerouslyAllowBrowser: true // Ensure client-side usage is allowed
-});
 
 /**
  * Compresses and resizes an image file to a maximum dimension of 800px.
@@ -58,13 +52,13 @@ async function compressImage(file) {
 }
 
 /**
- * Analyzes a plant image using OpenRouter with streaming to capture reasoning tokens.
+ * Analyzes a plant image using Groq API (Llama 4 Scout).
  * @param {File} imageFile 
  * @returns {Promise<Object>}
  */
 export const analyzeImageWithOpenRouter = async (imageFile) => {
     if (!API_KEY) {
-        throw new Error("MISSING_API_KEY: OpenRouter API Key is missing. Please add VITE_OPENROUTER_API_KEY to your .env file.");
+        throw new Error("MISSING_API_KEY: API Key is missing. Please add VITE_GROQ_API_KEY to your .env file.");
     }
 
     try {
@@ -116,40 +110,45 @@ export const analyzeImageWithOpenRouter = async (imageFile) => {
         Do not include markdown formatting like \`\`\`json. Just the raw JSON.
         `;
 
-        // Stream the response to get reasoning tokens in usage
-        const stream = await openrouter.chat.send({
-            model: "nvidia/nemotron-nano-12b-v2-vl:free",
-            messages: [
-                {
-                    role: "user",
-                    content: [
-                        { type: "text", text: prompt },
-                        { type: "image_url", imageUrl: { url: base64Image } }
-                    ]
-                }
-            ],
-            stream: true,
-            streamOptions: {
-                includeUsage: true
-            }
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                messages: [
+                    {
+                        role: "user",
+                        content: [
+                            {
+                                type: "text",
+                                text: prompt
+                            },
+                            {
+                                type: "image_url",
+                                image_url: {
+                                    url: base64Image
+                                }
+                            }
+                        ]
+                    }
+                ],
+                model: "meta-llama/llama-4-scout-17b-16e-instruct",
+                temperature: 0.5, // Lower temperature for more deterministic JSON
+                max_completion_tokens: 1024,
+                top_p: 1,
+                stream: false // Disable streaming for simpler JSON parsing
+            })
         });
 
-        let responseContent = "";
-
-        for await (const chunk of stream) {
-            const content = chunk.choices[0]?.delta?.content;
-            if (content) {
-                responseContent += content;
-            }
-
-            // Usage information comes in the final chunk
-            if (chunk.usage) {
-                console.log("OpenRouter Usage:", chunk.usage);
-                if (chunk.usage.reasoning_tokens) {
-                    console.log("Reasoning tokens:", chunk.usage.reasoning_tokens);
-                }
-            }
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`Groq API Error: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
         }
+
+        const data = await response.json();
+        const responseContent = data.choices[0]?.message?.content;
 
         console.log("Raw Analysis Response:", responseContent);
 
@@ -157,19 +156,26 @@ export const analyzeImageWithOpenRouter = async (imageFile) => {
         return JSON.parse(jsonString);
 
     } catch (error) {
-        console.error("OpenRouter Analysis Error:", error);
-        throw new Error(`Failed to analyze image: ${error.message || error}`);
+        console.error("Analysis Error:", error);
+
+        let errorMessage = error.message || error;
+
+        if (errorMessage.includes("401")) {
+            errorMessage = "Unauthorized. Please check your API Key.";
+        }
+
+        throw new Error(`Failed to analyze image: ${errorMessage}`);
     }
 };
 
 /**
- * Searches for plant problems based on a text description using OpenRouter.
+ * Searches for plant problems based on a text description using Groq.
  * @param {string} query 
  * @returns {Promise<Object>}
  */
 export const searchPlantProblemWithOpenRouter = async (query) => {
     if (!API_KEY) {
-        throw new Error("Missing OpenRouter API Key.");
+        throw new Error("Missing API Key.");
     }
 
     try {
@@ -207,24 +213,34 @@ export const searchPlantProblemWithOpenRouter = async (query) => {
         Do not include markdown formatting like \`\`\`json. Just the raw JSON.
         `;
 
-        const stream = await openrouter.chat.send({
-            model: "nvidia/nemotron-nano-12b-v2-vl:free", // Switched to same model for consistency
-            messages: [
-                {
-                    role: "user",
-                    content: prompt
-                }
-            ],
-            stream: true
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                messages: [
+                    {
+                        role: "user",
+                        content: prompt
+                    }
+                ],
+                model: "meta-llama/llama-4-scout-17b-16e-instruct",
+                temperature: 0.7,
+                max_completion_tokens: 1024,
+                top_p: 1,
+                stream: false
+            })
         });
 
-        let responseContent = "";
-        for await (const chunk of stream) {
-            const content = chunk.choices[0]?.delta?.content;
-            if (content) {
-                responseContent += content;
-            }
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`Groq API Error: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
         }
+
+        const data = await response.json();
+        const responseContent = data.choices[0]?.message?.content;
 
         console.log("Raw Search Response:", responseContent);
 
@@ -232,7 +248,7 @@ export const searchPlantProblemWithOpenRouter = async (query) => {
         return JSON.parse(jsonString);
 
     } catch (error) {
-        console.error("OpenRouter Search Error:", error);
+        console.error("Search Error:", error);
         throw new Error(`Failed to search: ${error.message || error}`);
     }
 };
