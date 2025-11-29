@@ -317,10 +317,21 @@ const PlantProblems = () => {
 
                                                 <div className="rounded-xl overflow-hidden mb-4 h-40 bg-slate-100 shrink-0">
                                                     <img
-                                                        src={item.image}
+                                                        src={(() => {
+                                                            const getSupplementImage = (name) => {
+                                                                const normalizedName = name.toLowerCase();
+                                                                if (normalizedName.includes('neem')) return `${BASE_URL}image_upload/neem_oil.png`;
+                                                                if (normalizedName.includes('fungicide')) return `${BASE_URL}image_upload/fungicide.png`;
+                                                                if (normalizedName.includes('potassium bicarbonate')) return `${BASE_URL}image_upload/potassium_bicarbonate.png`;
+                                                                if (normalizedName.includes('calcium nitrate')) return `${BASE_URL}image_upload/calcium_nitrate.png`;
+                                                                if (normalizedName.includes('fertilizer')) return `${BASE_URL}image_upload/fertilizer.png`;
+                                                                return `${BASE_URL}image_upload/fertilizer.png`; // Default fallback
+                                                            };
+                                                            return getSupplementImage(item.name);
+                                                        })()}
                                                         alt={item.name}
                                                         className="w-full h-full object-cover"
-                                                        onError={(e) => { e.target.src = "image_upload/fertilizer.png" }}
+                                                        onError={(e) => { e.target.src = `${BASE_URL}image_upload/fertilizer.png` }}
                                                     />
                                                 </div>
 
