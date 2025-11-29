@@ -168,6 +168,9 @@ const ResultCard = ({ result, onReset }) => {
                                     </div>
                                     <div className="flex-1">
                                         <h4 className="font-bold text-slate-800 mb-1 group-hover:text-brand-primary transition-colors">{item.name}</h4>
+                                        {item.why_this_product && (
+                                            <p className="text-xs text-slate-500 mb-2 italic line-clamp-2">"{item.why_this_product}"</p>
+                                        )}
                                         <div className="flex items-center justify-between">
                                             <span className="text-brand-primary font-bold">₹{item.price.toString().replace(/[^\d]/g, '')}</span>
                                             <span className="text-xs text-slate-500 flex items-center gap-1">

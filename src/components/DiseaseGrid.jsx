@@ -4,12 +4,12 @@ const diseases = [
     {
         name: "Shot Hole Disease",
         description: "The disease's name couldn't be more evident because it is about the holes...",
-        image: "/image_upload/shot_hole_disease.png"
+        image: "image_upload/shot_hole_disease.png"
     },
     {
         name: "Peach Leaf Curl",
         description: "The fungus Taphrina Deformans causes this plant's disease...",
-        image: "/image_upload/peach_leaf_curl.png"
+        image: "image_upload/peach_leaf_curl.png"
     },
     {
         name: "Nutrient excess",

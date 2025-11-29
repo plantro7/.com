@@ -18,12 +18,14 @@ const MOCK_SOLUTIONS = {
             "Avoid overhead watering; keep foliage dry.",
             "Improve air circulation around the plant."
         ],
-        supplement: {
-            name: "Copper Fungicide",
-            image: "https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&q=80&w=400",
-            price: 450,
-            link: "https://www.flipkart.com/search?q=copper+fungicide+for+plants"
-        }
+        supplements: [
+            {
+                name: "Copper Fungicide",
+                image: "/plant-disease-finder/image_upload/fungicide.png",
+                price: 450,
+                link: "https://www.flipkart.com/search?q=copper+fungicide+for+plants"
+            }
+        ]
     },
     "Yellowing": {
         plantName: "Snake Plant",
@@ -37,12 +39,14 @@ const MOCK_SOLUTIONS = {
             "Repot in fresh, dry, well-draining soil.",
             "Ensure the pot has drainage holes."
         ],
-        supplement: {
-            name: "Perlite & Potting Mix",
-            image: "https://images.unsplash.com/photo-1599598425947-736d96a60338?auto=format&fit=crop&q=80&w=400",
-            price: 299,
-            link: "https://www.flipkart.com/search?q=perlite+potting+mix"
-        }
+        supplements: [
+            {
+                name: "Perlite & Potting Mix",
+                image: "/plant-disease-finder/image_upload/Gemini_Generated_Image_l2lvz0l2lvz0l2lv.png",
+                price: 299,
+                link: "https://www.flipkart.com/search?q=perlite+potting+mix"
+            }
+        ]
     }
 };
 
@@ -77,14 +81,14 @@ const PlantProblems = () => {
                 fastRecoveryTips: Array.isArray(result.treatment)
                     ? result.treatment
                     : (result.treatment ? [result.treatment] : ["Consult a local nursery."]),
-                supplement: (result.supplements && result.supplements.length > 0)
-                    ? result.supplements[0]
-                    : {
+                supplements: (result.supplements && result.supplements.length > 0)
+                    ? result.supplements
+                    : [{
                         name: "General Plant Food",
-                        image: "https://images.unsplash.com/photo-1599598425947-736d96a60338?auto=format&fit=crop&q=80&w=400",
+                        image: "/plant-disease-finder/image_upload/fertilizer.png",
                         price: "299",
                         link: "https://www.flipkart.com/search?q=plant+fertilizer"
-                    }
+                    }]
             };
 
             setSolution(mappedSolution);
@@ -273,36 +277,51 @@ const PlantProblems = () => {
                                     </ul>
                                 </div>
 
-                                {/* 3. Recommended Supplement */}
-                                <div className="bg-white rounded-3xl shadow-lg p-6 border-2 border-brand-primary/10 relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-bl-xl">
-                                        Recommended
+                                {/* 3. Recommended Supplements */}
+                                <div className="md:col-span-3">
+                                    <h3 className="text-xl font-bold text-brand-dark mb-6">Recommended Products</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {solution.supplements && solution.supplements.map((item, idx) => (
+                                            <div key={idx} className="bg-white rounded-3xl shadow-lg p-6 border-2 border-brand-primary/10 relative overflow-hidden flex flex-col">
+                                                <div className="absolute top-0 right-0 bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-bl-xl">
+                                                    Recommended
+                                                </div>
+
+                                                <div className="rounded-xl overflow-hidden mb-4 h-40 bg-slate-100 shrink-0">
+                                                    <img
+                                                        src={item.image}
+                                                        alt={item.name}
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => { e.target.src = "/plant-disease-finder/image_upload/fertilizer.png" }}
+                                                    />
+                                                </div>
+
+                                                <div className="flex flex-col flex-grow">
+                                                    <h4 className="font-bold text-brand-dark mb-1 line-clamp-2">{item.name}</h4>
+                                                    <div className="text-brand-primary font-bold text-xl mb-2">₹{item.price}</div>
+                                                    {item.why_this_product && (
+                                                        <p className="text-xs text-slate-500 mb-4 italic">
+                                                            "{item.why_this_product}"
+                                                        </p>
+                                                    )}
+
+                                                    <div className="mt-auto">
+                                                        <a
+                                                            href={item.link}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="block"
+                                                        >
+                                                            <Button className="w-full bg-brand-primary hover:bg-mint-600 text-white rounded-xl py-3 font-bold shadow-md flex items-center justify-center gap-2">
+                                                                <ShoppingCart className="w-4 h-4" />
+                                                                Buy Now
+                                                            </Button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-
-                                    <h3 className="text-lg font-bold text-brand-dark mb-4">Treatment Product</h3>
-
-                                    <div className="rounded-xl overflow-hidden mb-4 h-40 bg-slate-100">
-                                        <img
-                                            src={solution.supplement.image}
-                                            alt={solution.supplement.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-
-                                    <h4 className="font-bold text-brand-dark mb-1">{solution.supplement.name}</h4>
-                                    <div className="text-brand-primary font-bold text-xl mb-4">₹{solution.supplement.price}</div>
-
-                                    <a
-                                        href={solution.supplement.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="block"
-                                    >
-                                        <Button className="w-full bg-brand-primary hover:bg-mint-600 text-white rounded-xl py-3 font-bold shadow-md flex items-center justify-center gap-2">
-                                            <ShoppingCart className="w-4 h-4" />
-                                            Buy on Flipkart
-                                        </Button>
-                                    </a>
                                 </div>
                             </div>
 

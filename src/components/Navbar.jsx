@@ -29,7 +29,7 @@ const Navbar = () => {
           <div className="flex items-center gap-8">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 cursor-pointer">
-              <img src="/logo.jpg" alt="Plantro Logo" className="w-10 h-10 object-cover rounded-full" />
+              <img src="logo.jpg" alt="Plantro Logo" className="w-10 h-10 object-cover rounded-full" />
               <span className="text-2xl font-bold text-brand-dark tracking-tight">
                 Plantro
               </span>
