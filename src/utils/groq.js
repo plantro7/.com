@@ -173,7 +173,7 @@ export const analyzeImageWithGroq = async (imageFile) => {
         let errorMessage = error.message || error;
 
         if (errorMessage.includes("401")) {
-            errorMessage = "Unauthorized. Please check your API Key.";
+            errorMessage = "Unauthorized. Please add VITE_GROQ_API_KEY to your GitHub Secrets.";
         }
 
         throw new Error(`Failed to analyze image: ${errorMessage}`);
