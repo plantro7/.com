@@ -14,7 +14,7 @@ import Supplements from './pages/Supplements';
 import PlantProblems from './pages/PlantProblems';
 
 
-import { analyzeImageWithOpenRouter } from './utils/openrouter';
+import { analyzeImageWithGroq } from './utils/groq';
 import { Camera } from 'lucide-react';
 
 import { useLanguage, LanguageProvider } from './context/LanguageContext';
@@ -44,8 +44,8 @@ function Home() {
     setIsAnalyzing(true);
     setError(null);
     try {
-      // Use OpenRouter AI
-      const analysisResult = await analyzeImageWithOpenRouter(image);
+      // Use Groq AI
+      const analysisResult = await analyzeImageWithGroq(image);
       setResult(analysisResult);
     } catch (error) {
       console.error("Analysis failed:", error);
@@ -128,7 +128,7 @@ function Home() {
                       <li>Go to your GitHub Repository Settings.</li>
                       <li>Navigate to <strong>Secrets and variables</strong> &gt; <strong>Actions</strong>.</li>
                       <li>Click <strong>New repository secret</strong>.</li>
-                      <li>Name: <code className="bg-slate-100 px-1 py-0.5 rounded text-red-600">VITE_OPENROUTER_API_KEY</code></li>
+                      <li>Name: <code className="bg-slate-100 px-1 py-0.5 rounded text-red-600">VITE_GROQ_API_KEY</code></li>
                       <li>Value: Your API Key (starts with sk-or-v1...)</li>
                       <li>Redeploy your app (or push a new commit).</li>
                     </ol>

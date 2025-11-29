@@ -1,4 +1,3 @@
-
 const API_KEY = import.meta.env.VITE_GROQ_API_KEY || import.meta.env.VITE_OPENROUTER_API_KEY;
 
 // Debug: Check if API Key is loaded (masked)
@@ -56,7 +55,7 @@ async function compressImage(file) {
  * @param {File} imageFile 
  * @returns {Promise<Object>}
  */
-export const analyzeImageWithOpenRouter = async (imageFile) => {
+export const analyzeImageWithGroq = async (imageFile) => {
     if (!API_KEY) {
         throw new Error("MISSING_API_KEY: API Key is missing. Please add VITE_GROQ_API_KEY to your .env file.");
     }
@@ -86,8 +85,18 @@ export const analyzeImageWithOpenRouter = async (imageFile) => {
             "plantName": "Plant Name",
             "confidence": number (0.0 to 1.0),
             "reasoning": "Explain step-by-step why you reached this conclusion. Mention specific visual features you observed.",
-            "description": "Short description or array of symptoms",
-            "treatment": "Short treatment advice or array of steps",
+            "description": [
+                "Symptom/Analysis Point 1",
+                "Symptom/Analysis Point 2",
+                "Symptom/Analysis Point 3",
+                "Symptom/Analysis Point 4"
+            ],
+            "treatment": [
+                "Treatment Step 1",
+                "Treatment Step 2",
+                "Treatment Step 3",
+                "Treatment Step 4"
+            ],
             "recoveryTime": "Estimated time string",
             "supplements": [
                 { 
@@ -95,17 +104,20 @@ export const analyzeImageWithOpenRouter = async (imageFile) => {
                     "price": "Estimated Price in INR (just the number, e.g. 450)", 
                     "store": "Flipkart", 
                     "link": "https://www.flipkart.com/search?q=PRODUCT_NAME",
-                    "image": "/.com/image_upload/fertilizer.png",
+                    "image": "/image_upload/fertilizer.png",
                     "why_this_product": "Brief explanation of why this specific product helps this specific disease."
                 }
             ]
         }
         
         IMPORTANT:
-        1. RECOMMENDATIONS MUST BE SPECIFIC. Do NOT default to "Neem Oil" unless it is actually the best treatment for the specific pest/disease (e.g. aphids). For fungal issues, suggest fungicides. For nutrient deficiency, suggest specific fertilizers.
-        2. For the "link" field in supplements, construct a valid Flipkart search URL using the product name.
-        3. For the "price" field, provide a realistic estimate in Indian Rupees (INR) as a number only.
-        4. Provide 2-3 distinct options if possible (e.g. organic vs chemical).
+        1. **Analysis & Symptoms (description)**: Provide an array of AT LEAST 4 distinct, detailed points describing the visual symptoms and the condition of the plant. Use professional agricultural terminology.
+        2. **Effective Treatment (treatment)**: Provide an array of AT LEAST 4 distinct, actionable treatment steps. Include cultural controls, chemical controls (if necessary), and preventive measures.
+        3. **Tone**: The output should be PROFESSIONAL, AUTHORITATIVE, and HELPFUL.
+        4. RECOMMENDATIONS MUST BE SPECIFIC. Do NOT default to "Neem Oil" unless it is actually the best treatment for the specific pest/disease (e.g. aphids). For fungal issues, suggest fungicides. For nutrient deficiency, suggest specific fertilizers.
+        5. For the "link" field in supplements, construct a valid Flipkart search URL using the product name.
+        6. For the "price" field, provide a realistic estimate in Indian Rupees (INR) as a number only.
+        7. Provide 2-3 distinct options if possible (e.g. organic vs chemical).
 
         Do not include markdown formatting like \`\`\`json. Just the raw JSON.
         `;
@@ -173,7 +185,7 @@ export const analyzeImageWithOpenRouter = async (imageFile) => {
  * @param {string} query 
  * @returns {Promise<Object>}
  */
-export const searchPlantProblemWithOpenRouter = async (query) => {
+export const searchPlantProblemWithGroq = async (query) => {
     if (!API_KEY) {
         throw new Error("Missing API Key.");
     }
@@ -199,7 +211,7 @@ export const searchPlantProblemWithOpenRouter = async (query) => {
                     "name": "Recommended Product Name",
                     "price": "Estimated Price in INR (just the number, e.g. 450)",
                     "link": "https://www.flipkart.com/search?q=PRODUCT_NAME_HERE",
-                    "image": "/.com/image_upload/fertilizer.png",
+                    "image": "/image_upload/fertilizer.png",
                     "why_this_product": "Brief explanation of why this specific product helps this specific disease."
                 }
             ]

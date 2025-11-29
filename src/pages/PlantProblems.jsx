@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search, Camera, Upload, ArrowRight, ShoppingCart, Clock, AlertCircle, CheckCircle } from 'lucide-react';
 import Button from '../components/Button';
 import ImageUploader from '../components/ImageUploader';
-import { analyzeImageWithOpenRouter, searchPlantProblemWithOpenRouter } from '../utils/openrouter';
+import { analyzeImageWithGroq, searchPlantProblemWithGroq } from '../utils/groq';
 import { analyzeImage as analyzeImageOffline } from '../utils/tfModel';
 
 // Mock data for solutions
@@ -22,7 +22,7 @@ const MOCK_SOLUTIONS = {
         supplements: [
             {
                 name: "Copper Fungicide",
-                image: "/.com/image_upload/fungicide.png",
+                image: "/image_upload/fungicide.png",
                 price: 450,
                 link: "https://www.flipkart.com/search?q=copper+fungicide+for+plants"
             }
@@ -43,7 +43,7 @@ const MOCK_SOLUTIONS = {
         supplements: [
             {
                 name: "Perlite & Potting Mix",
-                image: "/.com/image_upload/Gemini_Generated_Image_l2lvz0l2lvz0l2lv.png",
+                image: "/image_upload/Gemini_Generated_Image_l2lvz0l2lvz0l2lv.png",
                 price: 299,
                 link: "https://www.flipkart.com/search?q=perlite+potting+mix"
             }
@@ -69,7 +69,7 @@ const PlantProblems = () => {
             if (isOfflineMode) {
                 result = await analyzeImageOffline(file);
             } else {
-                result = await analyzeImageWithOpenRouter(file);
+                result = await analyzeImageWithGroq(file);
             }
 
             if (result.isUnknown) {
@@ -92,7 +92,7 @@ const PlantProblems = () => {
                     ? result.supplements
                     : [{
                         name: "General Plant Food",
-                        image: "/.com/image_upload/fertilizer.png",
+                        image: "/image_upload/fertilizer.png",
                         price: "299",
                         link: "https://www.flipkart.com/search?q=plant+fertilizer"
                     }]
@@ -115,7 +115,7 @@ const PlantProblems = () => {
         setSolution(null);
 
         try {
-            const result = await searchPlantProblemWithOpenRouter(searchQuery);
+            const result = await searchPlantProblemWithGroq(searchQuery);
             setSolution(result);
         } catch (error) {
             console.error("Search failed:", error);
@@ -318,7 +318,7 @@ const PlantProblems = () => {
                                                         src={item.image}
                                                         alt={item.name}
                                                         className="w-full h-full object-cover"
-                                                        onError={(e) => { e.target.src = "/.com/image_upload/fertilizer.png" }}
+                                                        onError={(e) => { e.target.src = "image_upload/fertilizer.png" }}
                                                     />
                                                 </div>
 
