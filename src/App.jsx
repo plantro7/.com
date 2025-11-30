@@ -28,7 +28,7 @@ function Home() {
   const [error, setError] = useState(null);
 
   const uploadSectionRef = useRef(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { currentUser, login } = useAuth();
 
   const handleImageSelect = (file, previewUrl) => {
@@ -45,7 +45,7 @@ function Home() {
     setError(null);
     try {
       // Use Groq AI
-      const analysisResult = await analyzeImageWithGroq(image);
+      const analysisResult = await analyzeImageWithGroq(image, language);
       setResult(analysisResult);
     } catch (error) {
       console.error("Analysis failed:", error);

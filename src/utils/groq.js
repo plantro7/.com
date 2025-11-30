@@ -23,7 +23,7 @@ async function compressImage(file) {
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
-                const maxDim = 800;
+                const maxDim = 2048; // Increased to 2K resolution for maximum detail
 
                 if (width > maxDim || height > maxDim) {
                     if (width > height) {
@@ -40,8 +40,8 @@ async function compressImage(file) {
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
 
-                // Compress to JPEG with 0.7 quality
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                // Compress to JPEG with 0.95 quality (Very High Quality)
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.95);
                 resolve(compressedBase64);
             };
             img.onerror = (error) => reject(error);
@@ -51,11 +51,43 @@ async function compressImage(file) {
 }
 
 /**
+ * Robustly extracts the first JSON object from a string using brace counting.
+ * @param {string} text 
+ * @returns {string} The extracted JSON string
+ */
+function extractJSON(text) {
+    let startIndex = text.indexOf('{');
+    if (startIndex === -1) return null;
+
+    let braceCount = 0;
+    let endIndex = -1;
+
+    for (let i = startIndex; i < text.length; i++) {
+        if (text[i] === '{') {
+            braceCount++;
+        } else if (text[i] === '}') {
+            braceCount--;
+            if (braceCount === 0) {
+                endIndex = i;
+                break;
+            }
+        }
+    }
+
+    if (endIndex !== -1) {
+        return text.substring(startIndex, endIndex + 1);
+    }
+
+    return null;
+}
+
+/**
  * Analyzes a plant image using Groq API (Llama 4 Scout).
  * @param {File} imageFile 
+ * @param {string} language - 'en' or 'bn'
  * @returns {Promise<Object>}
  */
-export const analyzeImageWithGroq = async (imageFile) => {
+export const analyzeImageWithGroq = async (imageFile, language = 'en') => {
     if (!API_KEY) {
         throw new Error("MISSING_API_KEY: API Key is missing. Please add VITE_GROQ_API_KEY to your .env file.");
     }
@@ -70,53 +102,65 @@ export const analyzeImageWithGroq = async (imageFile) => {
         console.log(`Compressed size: ${compressedSizeKB.toFixed(2)} KB`);
 
         const prompt = `
-        Analyze this image of a plant. 
-        1. Identify the plant name.
-        2. Identify if it has any disease or if it is healthy.
-        3. If diseased, provide the disease name, confidence level (0-1), description of symptoms, treatment, and recommended supplements.
-        4. If healthy, provide care tips.
-        5. CRITICAL: If the image contains a PERSON (even if holding a plant), or if it is an illustration/cartoon, or if the main subject is not a plant/fruit/vegetable, you MUST return "isUnknown": true.
-        6. We only want to diagnose REAL PHOTOS of plants. If you are unsure, return "isUnknown": true.
-
+        Analyze this high-resolution image of a plant with EXHAUSTIVE ATTENTION TO DETAIL.
+        
+        SIMULATE A DEEP SEARCH AND EXPERT CONSULTATION PROCESS:
+        
+        PHASE 1: VISUAL DATA EXTRACTION (Internal Monologue)
+        - Scan the image at full resolution.
+        - List EVERY visible feature: leaf texture, vein patterns, discoloration spots (size, color, halo), stem condition, soil type.
+        - If the image is blurry, acknowledge it but try to extract maximum detail.
+        
+        PHASE 2: SPECIES VERIFICATION
+        - Compare observed features against known plant species.
+        - CONFIRM the plant identity (e.g., "This is definitively a Tomato plant due to the serrated leaf margins and glandular trichomes").
+        - If the plant is misidentified, the entire diagnosis will be wrong. BE 100% SURE.
+        
+        PHASE 3: PATHOLOGY ANALYSIS
+        - Match symptoms to specific diseases.
+        - Differentiate between similar looking issues (e.g., Early Blight vs. Septoria Leaf Spot).
+        - Consider nutrient deficiencies and pest damage as alternatives.
+        
+        PHASE 4: FORMULATE COMPREHENSIVE REPORT
+        - Provide a diagnosis that is ACCURATE and DETAILED.
+        
         Return the result strictly as a valid JSON object with this structure:
         {
-            "isUnknown": boolean,
-            "name": "Disease Name" or "Healthy",
-            "plantName": "Plant Name",
-            "confidence": number (0.0 to 1.0),
-            "reasoning": "Explain step-by-step why you reached this conclusion. Mention specific visual features you observed.",
+            "name": "Precise Disease Name or 'Healthy'",
+            "plantName": "Precise Plant Name",
+            "confidence": 0.98,
+            "reasoning": "In-depth explanation of the diagnosis. Cite specific visual evidence from the image that supports this conclusion.",
             "description": [
-                "Symptom/Analysis Point 1",
-                "Symptom/Analysis Point 2",
-                "Symptom/Analysis Point 3",
-                "Symptom/Analysis Point 4"
+                "Observation 1: Detailed description of lesion shape, color, and distribution.",
+                "Observation 2: Analysis of the leaf margins and veins.",
+                "Observation 3: Progression of the disease (early/late stage).",
+                "Observation 4: Environmental factors likely contributing to this."
             ],
             "treatment": [
-                "Treatment Step 1",
-                "Treatment Step 2",
-                "Treatment Step 3",
-                "Treatment Step 4"
+                "Immediate: Specific isolation and pruning instructions.",
+                "Cultural: Detailed watering and soil management advice.",
+                "Chemical: Specific active ingredients to look for (e.g., Chlorothalonil, Copper Octanoate).",
+                "Preventive: Long-term strategies to prevent recurrence."
             ],
-            "recoveryTime": "Estimated time string",
+            "recoveryTime": "Realistic estimate (e.g., '3-4 weeks with consistent treatment')",
             "supplements": [
                 { 
                     "name": "Specific Product Name (e.g., Copper Fungicide, NPK 20-20-20)", 
                     "price": "Estimated Price in INR (just the number, e.g. 450)", 
                     "store": "Flipkart", 
                     "link": "https://www.flipkart.com/search?q=PRODUCT_NAME",
-                    "why_this_product": "Brief explanation of why this specific product helps this specific disease."
+                    "why_this_product": "Scientific explanation of why this active ingredient works for this specific disease."
                 }
             ]
         }
         
         IMPORTANT:
-        1. **Analysis & Symptoms (description)**: Provide an array of AT LEAST 4 distinct, detailed points describing the visual symptoms and the condition of the plant. Use professional agricultural terminology.
-        2. **Effective Treatment (treatment)**: Provide an array of AT LEAST 4 distinct, actionable treatment steps. Include cultural controls, chemical controls (if necessary), and preventive measures.
-        3. **Tone**: The output should be PROFESSIONAL, AUTHORITATIVE, and HELPFUL.
-        4. RECOMMENDATIONS MUST BE SPECIFIC. Do NOT default to "Neem Oil" unless it is actually the best treatment for the specific pest/disease (e.g. aphids). For fungal issues, suggest fungicides. For nutrient deficiency, suggest specific fertilizers.
-        5. For the "link" field in supplements, construct a valid Flipkart search URL using the product name.
-        6. For the "price" field, provide a realistic estimate in Indian Rupees (INR) as a number only.
-        7. Provide 2-3 distinct options if possible (e.g. organic vs chemical).
+        1. **ACCURACY IS PARAMOUNT**: Take your time. Do not rush.
+        2. **JSON Structure**: You MUST include 'name', 'plantName', and 'confidence' fields.
+        3. **Confidence**: Be honest. If the image is unclear, lower the score.
+        4. **Tone**: Expert, Scientific, yet Accessible.
+        5. **Links**: Valid Flipkart search URLs.
+        6. **Price**: Realistic INR estimate.
 
         Do not include markdown formatting like \`\`\`json. Just the raw JSON.
         `;
@@ -145,11 +189,11 @@ export const analyzeImageWithGroq = async (imageFile) => {
                         ]
                     }
                 ],
-                model: "meta-llama/llama-4-scout-17b-16e-instruct",
-                temperature: 0.5, // Lower temperature for more deterministic JSON
-                max_completion_tokens: 1024,
+                model: "meta-llama/llama-4-scout-17b-16e-instruct", // Switched to Llama 4 Scout (Alternative Vision Model)
+                temperature: 0.2, // Lower temperature for more deterministic/analytical results
+                max_completion_tokens: 2048, // Increased token limit for deeper analysis
                 top_p: 1,
-                stream: false // Disable streaming for simpler JSON parsing
+                stream: false
             })
         });
 
@@ -163,7 +207,12 @@ export const analyzeImageWithGroq = async (imageFile) => {
 
         console.log("Raw Analysis Response:", responseContent);
 
-        const jsonString = responseContent.replace(/```json/g, '').replace(/```/g, '').trim();
+        // Extract JSON object using robust brace counting
+        const jsonString = extractJSON(responseContent);
+        if (!jsonString) {
+            throw new Error("No valid JSON object found in response");
+        }
+
         return JSON.parse(jsonString);
 
     } catch (error) {
@@ -182,9 +231,10 @@ export const analyzeImageWithGroq = async (imageFile) => {
 /**
  * Searches for plant problems based on a text description using Groq.
  * @param {string} query 
+ * @param {string} language - 'en' or 'bn'
  * @returns {Promise<Object>}
  */
-export const searchPlantProblemWithGroq = async (query) => {
+export const searchPlantProblemWithGroq = async (query, language = 'en') => {
     if (!API_KEY) {
         throw new Error("Missing API Key.");
     }
@@ -196,6 +246,8 @@ export const searchPlantProblemWithGroq = async (query) => {
         
         Provide a diagnosis and solution based on this description.
         If the query is too vague, make a best guess or provide general advice for the symptoms described.
+
+        ${language === 'bn' ? 'CRITICAL: PROVIDE ALL TEXT CONTENT (plantName, diseaseName, description, recoveryTime, fastRecoveryTips, supplements details) IN BENGALI LANGUAGE.' : ''}
 
         Return the result strictly as a valid JSON object with this structure:
         {
@@ -254,7 +306,12 @@ export const searchPlantProblemWithGroq = async (query) => {
 
         console.log("Raw Search Response:", responseContent);
 
-        const jsonString = responseContent.replace(/```json/g, '').replace(/```/g, '').trim();
+        // Extract JSON object using robust brace counting
+        const jsonString = extractJSON(responseContent);
+        if (!jsonString) {
+            throw new Error("No valid JSON object found in response");
+        }
+
         return JSON.parse(jsonString);
 
     } catch (error) {

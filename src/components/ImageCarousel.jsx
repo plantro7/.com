@@ -18,7 +18,7 @@ const ImageCarousel = () => {
     }, []);
 
     return (
-        <div className="relative w-full max-w-lg mx-auto h-64 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/50 animate-float">
+        <div className="relative w-full max-w-lg mx-auto h-64 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/50 animate-float bg-mint-100">
             {images.map((img, index) => (
                 <div
                     key={index}
@@ -29,6 +29,10 @@ const ImageCarousel = () => {
                         src={img}
                         alt={`Plant variety ${index + 1}`}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                            console.error(`Failed to load image: ${img}`);
+                            e.target.style.display = 'none'; // Hide broken image
+                        }}
                     />
                 </div>
             ))}

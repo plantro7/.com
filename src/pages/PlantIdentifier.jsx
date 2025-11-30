@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 const BASE_URL = import.meta.env.BASE_URL;
 
@@ -33,19 +34,28 @@ const plants = [
 ];
 
 const PlantIdentifier = () => {
+    const { t } = useLanguage();
+
+    const getCategoryTitle = (category) => {
+        if (category === "Common Houseplants") return t('commonHouseplants');
+        if (category === "Fruits & Vegetables") return t('fruitsVegetables');
+        if (category === "Common Diseases") return t('commonDiseases');
+        return category;
+    };
+
     return (
         <div className="min-h-screen bg-white pt-8 pb-24">
             <div className="container mx-auto px-4">
-                <h1 className="text-4xl font-bold text-brand-dark mb-4">Plant Identifier Database</h1>
+                <h1 className="text-4xl font-bold text-brand-dark mb-4">{t('identifierTitle')}</h1>
                 <p className="text-slate-600 mb-12 max-w-2xl">
-                    Explore our extensive database of plants, fruits, and common diseases. Learn how to identify and care for them.
+                    {t('identifierDesc')}
                 </p>
 
                 <div className="space-y-16">
                     {plants.map((category, idx) => (
                         <div key={idx}>
                             <h2 className="text-2xl font-bold text-brand-primary mb-6 border-b border-mint-100 pb-2">
-                                {category.category}
+                                {getCategoryTitle(category.category)}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                                 {category.items.map((item, itemIdx) => (

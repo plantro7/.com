@@ -57,7 +57,11 @@ const ImageUploader = ({ onImageSelect }) => {
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
+                video: {
+                    facingMode: 'environment',
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                }
             });
             streamRef.current = stream;
             setIsCameraOpen(true);
@@ -94,7 +98,7 @@ const ImageUploader = ({ onImageSelect }) => {
             const file = new File([blob], "camera_capture.jpg", { type: "image/jpeg" });
             handleFile(file);
             stopCamera();
-        }, 'image/jpeg', 0.8);
+        }, 'image/jpeg', 0.95); // Increased quality to 0.95
     };
 
     return (

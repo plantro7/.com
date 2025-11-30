@@ -1,8 +1,10 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import { CheckCircle, AlertTriangle, XCircle, Info, Clock, MapPin, Star } from 'lucide-react';
 import Button from './Button';
 
 const ResultCard = ({ result, onReset }) => {
+    const { t } = useLanguage();
     if (!result) return null;
 
     const getStatusColor = (name) => {
@@ -45,12 +47,12 @@ const ResultCard = ({ result, onReset }) => {
                 <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <AlertTriangle className="w-10 h-10" />
                 </div>
-                <h2 className="text-3xl font-extrabold text-slate-800 mb-4">Not a Plant Detected</h2>
+                <h2 className="text-3xl font-extrabold text-slate-800 mb-4">{t('notPlantDetected')}</h2>
                 <p className="text-slate-600 text-lg mb-8 leading-relaxed max-w-md mx-auto">
-                    We could not identify a plant or fruit in this image. Please upload a clear photo of a plant, leaf, or fruit to get a diagnosis.
+                    {t('notPlantDesc')}
                 </p>
                 <Button onClick={onReset} size="xl" className="px-8 bg-brand-primary hover:bg-mint-600 text-white rounded-full font-bold shadow-lg">
-                    Try Again
+                    {t('tryAgain')}
                 </Button>
             </div>
         );
@@ -65,13 +67,13 @@ const ResultCard = ({ result, onReset }) => {
                         <StatusIcon className="w-10 h-10" />
                     </div>
                     <div>
-                        <div className="text-sm font-bold uppercase tracking-wider opacity-70 mb-1">Diagnosis Result</div>
+                        <div className="text-sm font-bold uppercase tracking-wider opacity-70 mb-1">{t('diagnosisResult')}</div>
                         <h2 className="text-3xl font-extrabold mb-1">{result.name}</h2>
-                        <p className="font-medium text-lg opacity-90">Confidence: {(result.confidence * 100).toFixed(0)}%</p>
+                        <p className="font-medium text-lg opacity-90">{t('confidence')}: {(result.confidence * 100).toFixed(0)}%</p>
                     </div>
                 </div>
                 <div className="bg-white/60 px-6 py-3 rounded-xl backdrop-blur-sm">
-                    <div className="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">Identified Plant</div>
+                    <div className="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">{t('identifiedPlant')}</div>
                     <div className="text-xl font-bold text-slate-800">{result.plantName || "Unknown Plant"}</div>
                 </div>
             </div>
@@ -82,7 +84,7 @@ const ResultCard = ({ result, onReset }) => {
                     <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100 mb-10">
                         <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
                             <Star className="w-6 h-6 mr-2 text-blue-500" />
-                            AI Reasoning
+                            {t('aiReasoning')}
                         </h3>
                         <p className="text-slate-700 leading-relaxed italic">
                             "{result.reasoning}"
@@ -95,7 +97,7 @@ const ResultCard = ({ result, onReset }) => {
                     <div>
                         <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
                             <Info className="w-6 h-6 mr-2 text-brand-primary" />
-                            Analysis & Symptoms
+                            {t('analysisSymptoms')}
                         </h3>
                         <ul className="space-y-3">
                             {Array.isArray(result.description) ? (
@@ -112,13 +114,13 @@ const ResultCard = ({ result, onReset }) => {
                     </div>
 
                     <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
-                        <h3 className="text-xl font-bold text-slate-800 mb-4">Recovery Estimation</h3>
+                        <h3 className="text-xl font-bold text-slate-800 mb-4">{t('recoveryEstimation')}</h3>
                         <div className="flex items-center gap-4 mb-2">
                             <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
                                 <Clock className="w-6 h-6" />
                             </div>
                             <div>
-                                <div className="text-sm text-slate-500 font-medium uppercase tracking-wider">Estimated Time</div>
+                                <div className="text-sm text-slate-500 font-medium uppercase tracking-wider">{t('estimatedTime')}</div>
                                 <div className="text-2xl font-bold text-slate-800">{result.recoveryTime || "Varies"}</div>
                             </div>
                         </div>
@@ -131,7 +133,7 @@ const ResultCard = ({ result, onReset }) => {
                 {/* Treatment Section */}
                 {result.treatment && (
                     <div className="border-t border-slate-100 pt-10">
-                        <h3 className="text-2xl font-bold text-slate-800 mb-6">Effective Treatment</h3>
+                        <h3 className="text-2xl font-bold text-slate-800 mb-6">{t('effectiveTreatment')}</h3>
                         <div className="bg-mint-50/50 rounded-2xl p-8 border border-mint-100">
                             <ul className="space-y-4">
                                 {Array.isArray(result.treatment) ? (
@@ -154,7 +156,7 @@ const ResultCard = ({ result, onReset }) => {
                 {/* Supplements Section */}
                 {result.supplements && result.supplements.length > 0 && (
                     <div className="border-t border-slate-100 pt-10">
-                        <h3 className="text-2xl font-bold text-slate-800 mb-6">Recommended Supplements</h3>
+                        <h3 className="text-2xl font-bold text-slate-800 mb-6">{t('recommendedProducts')}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {result.supplements.map((item, idx) => (
                                 <a
@@ -175,7 +177,7 @@ const ResultCard = ({ result, onReset }) => {
                                         <div className="flex items-center justify-between">
                                             <span className="text-brand-primary font-bold">₹{item.price.toString().replace(/[^\d]/g, '')}</span>
                                             <span className="text-xs text-slate-500 flex items-center gap-1">
-                                                <MapPin className="w-3 h-3" /> Buy on Flipkart
+                                                <MapPin className="w-3 h-3" /> {t('buyOnFlipkart')}
                                             </span>
                                         </div>
                                     </div>
@@ -192,8 +194,8 @@ const ResultCard = ({ result, onReset }) => {
 
                         {!submitted ? (
                             <form onSubmit={handleFeedbackSubmit} className="relative z-10">
-                                <h3 className="text-xl font-bold mb-2">Was this diagnosis helpful?</h3>
-                                <p className="text-slate-400 mb-6 text-sm">Your feedback helps us improve our accuracy.</p>
+                                <h3 className="text-xl font-bold mb-2">{t('wasHelpful')}</h3>
+                                <p className="text-slate-400 mb-6 text-sm">{t('feedbackDesc')}</p>
 
                                 <div className="flex gap-2 mb-6">
                                     {[1, 2, 3, 4, 5].map((star) => (
@@ -220,7 +222,7 @@ const ResultCard = ({ result, onReset }) => {
                                     disabled={rating === 0}
                                     className="bg-brand-primary hover:bg-brand-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-xl transition-all flex items-center gap-2"
                                 >
-                                    Submit Feedback
+                                    {t('submitFeedback')}
                                 </button>
                             </form>
                         ) : (
@@ -228,8 +230,8 @@ const ResultCard = ({ result, onReset }) => {
                                 <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white">
                                     <CheckCircle className="w-8 h-8" />
                                 </div>
-                                <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
-                                <p className="text-slate-400">Your feedback has been recorded successfully.</p>
+                                <h3 className="text-2xl font-bold mb-2">{t('thankYou')}</h3>
+                                <p className="text-slate-400">{t('feedbackRecorded')}</p>
                             </div>
                         )}
                     </div>
@@ -237,11 +239,11 @@ const ResultCard = ({ result, onReset }) => {
 
                 <div className="pt-4 flex justify-center">
                     <Button onClick={onReset} variant="secondary" size="lg" className="px-8">
-                        Analyze Another Plant
+                        {t('analyzeAnother')}
                     </Button>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

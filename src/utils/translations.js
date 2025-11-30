@@ -45,7 +45,42 @@ export const translations = {
         aiSearch: "AI Search",
         searchPlaceholder: "Describe the problem (e.g., 'yellow leaves', 'brown spots')...",
         searchBtn: "Search",
-        commonSearches: "Common Searches"
+        commonSearches: "Common Searches",
+
+        // Plant Problems Page - Extra
+        diagnoseFixTitle: "Diagnose & Fix Plant Problems",
+        diagnoseFixDesc: "Use our AI-powered scanner or search database to find immediate solutions for your plant's health issues.",
+        uploadAffectedArea: "Upload a photo of the affected area",
+        analyzingHealth: "Analyzing plant health...",
+        searchingDatabase: "Searching AI database...",
+        offlineMode: "Offline Mode",
+        enableOffline: "Enable Offline Mode",
+        offlineEnabled: "Offline Mode Enabled",
+
+        // Result Card
+        diagnosisResult: "Diagnosis Result",
+        confidence: "Confidence",
+        identifiedPlant: "Identified Plant",
+        aiReasoning: "AI Reasoning",
+        analysisSymptoms: "Analysis & Symptoms",
+        recoveryEstimation: "Recovery Estimation",
+        effectiveTreatment: "Effective Treatment",
+        recommendedProducts: "Recommended Products",
+        wasHelpful: "Was this diagnosis helpful?",
+        feedbackDesc: "Your feedback helps us improve our accuracy.",
+        submitFeedback: "Submit Feedback",
+        thankYou: "Thank You!",
+        feedbackRecorded: "Your feedback has been recorded successfully.",
+        analyzeAnother: "Analyze Another Plant",
+        tryAgain: "Try Again",
+        notPlantDetected: "Not a Plant Detected",
+        notPlantDesc: "We could not identify a plant or fruit in this image. Please upload a clear photo of a plant, leaf, or fruit to get a diagnosis.",
+        buyNow: "Buy Now",
+
+        // Plant Identifier
+        commonHouseplants: "Common Houseplants",
+        fruitsVegetables: "Fruits & Vegetables",
+        commonDiseases: "Common Diseases"
     },
     bn: {
         // Navbar
@@ -93,6 +128,41 @@ export const translations = {
         aiSearch: "এআই সার্চ",
         searchPlaceholder: "সমস্যাটি বর্ণনা করুন (যেমন, 'হলুদ পাতা', 'বাদামী দাগ')...",
         searchBtn: "সার্চ",
-        commonSearches: "সাধারণ অনুসন্ধান"
+        commonSearches: "সাধারণ অনুসন্ধান",
+
+        // Plant Problems Page - Extra
+        diagnoseFixTitle: "গাছের সমস্যা নির্ণয় ও সমাধান",
+        diagnoseFixDesc: "আপনার গাছের স্বাস্থ্য সমস্যার তাৎক্ষণিক সমাধান পেতে আমাদের এআই স্ক্যানার বা সার্চ ডাটাবেস ব্যবহার করুন।",
+        uploadAffectedArea: "আক্রান্ত অংশের একটি ছবি আপলোড করুন",
+        analyzingHealth: "গাছের স্বাস্থ্য বিশ্লেষণ করা হচ্ছে...",
+        searchingDatabase: "এআই ডাটাবেস অনুসন্ধান করা হচ্ছে...",
+        offlineMode: "অফলাইন মোড",
+        enableOffline: "অফলাইন মোড চালু করুন",
+        offlineEnabled: "অফলাইন মোড চালু আছে",
+
+        // Result Card
+        diagnosisResult: "রোগ নির্ণয়ের ফলাফল",
+        confidence: "নির্ভুলতা",
+        identifiedPlant: "সনাক্তকৃত গাছ",
+        aiReasoning: "এআই যুক্তি",
+        analysisSymptoms: "বিশ্লেষণ এবং লক্ষণ",
+        recoveryEstimation: "নিরাময়ের আনুমানিক সময়",
+        effectiveTreatment: "কার্যকর চিকিৎসা",
+        recommendedProducts: "সুপারিশকৃত পণ্য",
+        wasHelpful: "এই রোগ নির্ণয় কি সহায়ক ছিল?",
+        feedbackDesc: "আপনার মতামত আমাদের নির্ভুলতা উন্নত করতে সাহায্য করে।",
+        submitFeedback: "মতামত জমা দিন",
+        thankYou: "ধন্যবাদ!",
+        feedbackRecorded: "আপনার মতামত সফলভাবে রেকর্ড করা হয়েছে।",
+        analyzeAnother: "অন্য গাছ বিশ্লেষণ করুন",
+        tryAgain: "আবার চেষ্টা করুন",
+        notPlantDetected: "কোনো গাছ সনাক্ত হয়নি",
+        notPlantDesc: "আমরা এই ছবিতে কোনো গাছ বা ফল সনাক্ত করতে পারিনি। দয়া করে রোগ নির্ণয়ের জন্য একটি গাছ, পাতা বা ফলের স্পষ্ট ছবি আপলোড করুন।",
+        buyNow: "এখনই কিনুন",
+
+        // Plant Identifier
+        commonHouseplants: "সাধারণ ঘরোয়া গাছপালা",
+        fruitsVegetables: "ফল এবং শাকসবজি",
+        commonDiseases: "সাধারণ রোগ"
     }
 };
