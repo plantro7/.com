@@ -221,7 +221,11 @@ export const analyzeImageWithGroq = async (imageFile, language = 'en') => {
         let errorMessage = error.message || error;
 
         if (errorMessage.includes("401")) {
-            errorMessage = "Unauthorized. Please add VITE_GROQ_API_KEY to your GitHub Secrets.";
+            if (import.meta.env.PROD) {
+                errorMessage = "Unauthorized (401). The API Key in GitHub Secrets is invalid or expired. Please check 'VITE_GROQ_API_KEY' in your repository settings.";
+            } else {
+                errorMessage = "Unauthorized (401). The API Key in your .env file is invalid or expired.";
+            }
         }
 
         throw new Error(`Failed to analyze image: ${errorMessage}`);
